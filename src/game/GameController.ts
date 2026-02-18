@@ -76,8 +76,35 @@ export class GameController {
             () => this.render()
         );
 
+        this.setupMobileControls();
         this.showIdleScreen();
         this.gameLoop.start();
+    }
+
+    private setupMobileControls(): void {
+        const btnUp = document.getElementById('btn-up');
+        const btnDown = document.getElementById('btn-down');
+        const btnLeft = document.getElementById('btn-left');
+        const btnRight = document.getElementById('btn-right');
+
+        const handleInput = (dir: Vector2D) => {
+            if (this.state === 'IDLE' || this.state === 'GAME_OVER') {
+                this.startGame();
+            }
+            this.inputHandler.setManualDirection(dir);
+        };
+
+        btnUp?.addEventListener('click', () => handleInput(Vector2D.UP));
+        btnDown?.addEventListener('click', () => handleInput(Vector2D.DOWN));
+        btnLeft?.addEventListener('click', () => handleInput(Vector2D.LEFT));
+        btnRight?.addEventListener('click', () => handleInput(Vector2D.RIGHT));
+
+        // Also allow overlay click to start
+        this.overlay.addEventListener('click', () => {
+            if (this.state === 'IDLE' || this.state === 'GAME_OVER') {
+                this.startGame();
+            }
+        });
     }
 
     private handleStartRequest(): void {

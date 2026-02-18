@@ -44,6 +44,15 @@ export class InputHandler implements IInputHandler {
         this._nextDirection = Vector2D.RIGHT;
     }
 
+    setManualDirection(newDir: Vector2D): void {
+        // Prevent 180° reversal
+        const isReverse =
+            newDir.x === -this._direction.x && newDir.y === -this._direction.y;
+        if (!isReverse) {
+            this._nextDirection = newDir;
+        }
+    }
+
     private handleKeyDown = (e: KeyboardEvent): void => {
         // Start game on Enter/Space
         if (e.key === 'Enter' || e.key === ' ') {
